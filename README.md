@@ -6,7 +6,7 @@ exercice de maison
 # Create your models here.
 
 
-class Information(models.Model):
+class clinic(models.Model):
     logo = models.ImageField(blank=True, upload_to='post')
     numero = models.PhoneNumberField()
     adresse = models.EmailField()
@@ -15,24 +15,19 @@ class Information(models.Model):
     email = models.EmailField(max_length=254)
     description = models.CharField(max_length=255)
     lisence = models.CharField(max_length=255)
-    pinteress = models.CharField( max_length=255)
-    youtube = models.CharField( max_length=255)
-    google = models.CharField( max_length=255)
-    twitter = models.CharField( max_length=255)
-    facebook = models.CharField( max_length=255)
-    wifi = models.CharField( max_length=255)
+    actif = models.BooleanField(default=False)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
 
     class Meta:
-        """Meta definition for informations."""
+        """Meta definition for clinics."""
 
-        verbose_name = 'Informations'
-        verbose_name_plural = 'Informations'
+        verbose_name = 'clinics'
+        verbose_name_plural = 'clinics'
 
     def __str__(self):
-        """Unicode representation of Informations."""
+        """Unicode representation of clinics."""
         pass
 
 
@@ -124,6 +119,43 @@ class Citation(models.Model):
         pass
 
 
+class Category_doctor(models.Model):
+    """Model definition for Category_doctor."""
+
+    nom = models.CharField(, max_length=50)
+    description = models.CharField(, max_length=50)
+    image = models.ImageField(, upload_to='post')
+    
+
+    class Meta:
+        """Meta definition for Category_doctor."""
+
+        verbose_name = 'Category_doctor'
+        verbose_name_plural = 'Category_doctors'
+
+    def __str__(self):
+        """Unicode representation of Category_doctor."""
+        return self.nom
+
+class Reseaux_sociaux(models.Model):
+    """Model definition for Reseaux_sociaux."""
+
+    doctor_id = models.ForeignKey('Doctor',on_delete=models.CASCADE, related_name='reseaux')
+    clinic = models.ForeignKey('Clinic',on_delete=models.CASCADE, related_name='clinic')
+    liens = models.CharField(max_length=255)
+    nom = models.CharField(max_length=50)
+
+    class Meta:
+        """Meta definition for Reseaux_sociaux."""
+
+        verbose_name = 'Reseaux_sociaux'
+        verbose_name_plural = 'Reseaux_sociauxs'
+
+    def __str__(self):
+        """Unicode representation of Reseaux_sociaux."""
+        return self.nom
+
+
 
 class Doctor(models.Model):
     """Model definition for Doctor."""
@@ -133,10 +165,7 @@ class Doctor(models.Model):
     job = models.CharField(max_length=50)
     specialite = models.CharField(max_length=50)
     description = models.CharField(max_length=255)
-    facebook = models.CharField(max_length=255)
-    github = models.CharField(max_length=255)
-    twitter = models.CharField(max_length=255)
-    linkedin = models.CharField(max_length=255)
+    category_doctor = models.ForeignKey('Category_doctor',on_delete=models.CASCADE, related_name='doctor_category')
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -149,7 +178,7 @@ class Doctor(models.Model):
 
     def __str__(self):
         """Unicode representation of Doctor."""
-        pass
+        return self.nom
 
 class Rendez_vous(models.Model):
     """Model definition for Rendez_vous."""
@@ -163,7 +192,8 @@ class Rendez_vous(models.Model):
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
-    #doctor_id = models.ForeignKey('Doctor', on_delete = models.CASCADE, related_name = 'doctor_rdv',)
+    doctor_id = models.ForeignKey('Doctor', on_delete = models.CASCADE, related_name = 'doctor_rdv',)
+    category_doctor = models.ForeignKey('Category_doctor',on_delete=models.CASCADE, related_name='doctor_category')
 
     class Meta:
         """Meta definition for Rendez_vous."""
@@ -173,7 +203,7 @@ class Rendez_vous(models.Model):
 
     def __str__(self):
         """Unicode representation of Rendez_vous."""
-        pass
+        return self.nom
 
 
 
@@ -277,6 +307,7 @@ class Emergence_case(models.Model):
     def __str__(self):
         """Unicode representation of Emergence_case."""
         pass
+
 
 
   
