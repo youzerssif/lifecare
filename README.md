@@ -6,7 +6,7 @@ exercice de maison
 # Create your models here.
 
 
-class clinic(models.Model):
+class Clinic(models.Model):
     logo = models.ImageField(blank=True, upload_to='post')
     numero = models.PhoneNumberField()
     adresse = models.EmailField()
