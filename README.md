@@ -2,13 +2,14 @@
 exercice de maison
 ```
  from django.db import models
+from tinymce import HTMLField
 
 # Create your models here.
 
 
-class Clinic(models.Model):
+class clinic(models.Model):
     logo = models.ImageField(blank=True, upload_to='post')
-    numero = models.PhoneNumberField()
+    numero = models.IntegerField()
     adresse = models.EmailField()
     daily = models.CharField(max_length=255)
     localisation = models.CharField(max_length=255)
@@ -16,6 +17,13 @@ class Clinic(models.Model):
     description = models.CharField(max_length=255)
     lisence = models.CharField(max_length=255)
     actif = models.BooleanField(default=False)
+    icon = models.CharField(max_length=250)
+    facebook = models.CharField(max_length=50)
+    google = models.CharField(max_length=50)
+    twitter = models.CharField(max_length=50)
+    wifi = models.CharField(max_length=50)
+    pinteress = models.CharField(max_length=50)
+    youtube = models.CharField(max_length=50)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -28,7 +36,7 @@ class Clinic(models.Model):
 
     def __str__(self):
         """Unicode representation of clinics."""
-        pass
+        return self.email
 
 
 
@@ -37,9 +45,10 @@ class Bienvenu(models.Model):
 
     image = models.ImageField(upload_to='post')
     logo = models.ImageField(upload_to='post')
-    text1 = models.CharField( max_length=255)
-    text2 = models.CharField( max_length=255)
-    text3 = models.CharField( max_length=255)
+    text1 = models.CharField(max_length=255)
+    text2 = models.CharField(max_length=255)
+    text3 = models.CharField(max_length=255)
+    icon = models.CharField(max_length=250)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -52,12 +61,14 @@ class Bienvenu(models.Model):
 
     def __str__(self):
         """Unicode representation of Bienvenu."""
-        pass
+        return self.text1
 
 class Souscription(models.Model):
     """Model definition for Souscription."""
 
     email = models.EmailField(max_length=254)
+    #description = models.CharField(max_length=255)
+    icon = models.CharField(max_length=250)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -70,7 +81,7 @@ class Souscription(models.Model):
 
     def __str__(self):
         """Unicode representation of Souscription."""
-        pass
+        return self.email
 
 
 class Message(models.Model):
@@ -78,9 +89,10 @@ class Message(models.Model):
 
     nom = models.CharField(max_length=255)
     email = models.EmailField(max_length=254)
-    numero = models.PhoneNumberField()
+    numero = models.IntegerField()
     sujet = models.CharField(max_length=255)
     message = models.CharField(max_length=255)
+    icon = models.CharField(max_length=250)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -93,7 +105,7 @@ class Message(models.Model):
 
     def __str__(self):
         """Unicode representation of Message."""
-        pass
+        return self.nom
 
 
 class Citation(models.Model):
@@ -104,6 +116,7 @@ class Citation(models.Model):
     image_auteur = models.ImageField(upload_to='post')
     nom = models.CharField(max_length=50)
     job = models.CharField(max_length=50)
+    icon = models.CharField(max_length=250)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -116,15 +129,16 @@ class Citation(models.Model):
 
     def __str__(self):
         """Unicode representation of Citation."""
-        pass
+        return self.titre
 
 
 class Category_doctor(models.Model):
     """Model definition for Category_doctor."""
 
-    nom = models.CharField(, max_length=50)
-    description = models.CharField(, max_length=50)
-    image = models.ImageField(, upload_to='post')
+    nom = models.CharField(max_length=50)
+    description = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='post')
+    icon = models.CharField(max_length=250)
     
 
     class Meta:
@@ -137,23 +151,25 @@ class Category_doctor(models.Model):
         """Unicode representation of Category_doctor."""
         return self.nom
 
-class Reseaux_sociaux(models.Model):
-    """Model definition for Reseaux_sociaux."""
+# class Reseaux_sociaux(models.Model):
+#     """Model definition for Reseaux_sociaux."""
 
-    doctor_id = models.ForeignKey('Doctor',on_delete=models.CASCADE, related_name='reseaux')
-    clinic = models.ForeignKey('Clinic',on_delete=models.CASCADE, related_name='clinic')
-    liens = models.CharField(max_length=255)
-    nom = models.CharField(max_length=50)
+#     doctor_id = models.ForeignKey('Doctor',on_delete=models.CASCADE, related_name='reseaux')
+#     clinic = models.ForeignKey('Clinic',on_delete=models.CASCADE, related_name='clinic')
+#     liens = models.CharField(max_length=255)
+#     image = models.ImageField(upload_to='post')
+#     nom = models.CharField(max_length=50)
+#     icon = models.CharField(max_length=250)
 
-    class Meta:
-        """Meta definition for Reseaux_sociaux."""
+#     class Meta:
+#         """Meta definition for Reseaux_sociaux."""
 
-        verbose_name = 'Reseaux_sociaux'
-        verbose_name_plural = 'Reseaux_sociauxs'
+#         verbose_name = 'Reseaux_sociaux'
+#         verbose_name_plural = 'Reseaux_sociauxs'
 
-    def __str__(self):
-        """Unicode representation of Reseaux_sociaux."""
-        return self.nom
+#     def __str__(self):
+#         """Unicode representation of Reseaux_sociaux."""
+#         return self.nom
 
 
 
@@ -166,6 +182,11 @@ class Doctor(models.Model):
     specialite = models.CharField(max_length=50)
     description = models.CharField(max_length=255)
     category_doctor = models.ForeignKey('Category_doctor',on_delete=models.CASCADE, related_name='doctor_category')
+    icon = models.CharField(max_length=250)
+    facebook = models.CharField(max_length=50)
+    github = models.CharField(max_length=50)
+    twitter = models.CharField(max_length=50)
+    linkedin = models.CharField(max_length=50)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -185,15 +206,14 @@ class Rendez_vous(models.Model):
 
     nom = models.CharField(max_length=50)
     email = models.CharField(max_length=255)
-    jours = models.DateField(auto_now=False, auto_now_add=False)
-    heure = models.TimeField(auto_now=False, auto_now_add=False)
+    jours = models.CharField(max_length=255)
+    heure = models.CharField(max_length=255)
     nom_doctor = models.CharField(max_length=50)
     message = models.CharField(max_length=255)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
-    doctor_id = models.ForeignKey('Doctor', on_delete = models.CASCADE, related_name = 'doctor_rdv',)
-    category_doctor = models.ForeignKey('Category_doctor',on_delete=models.CASCADE, related_name='doctor_category')
+    icon = models.CharField(max_length=250)
 
     class Meta:
         """Meta definition for Rendez_vous."""
@@ -214,6 +234,7 @@ class Service(models.Model):
     description = models.CharField(max_length=255)
     image = models.ImageField(upload_to='post')
     statut = models.BooleanField(default = True)
+    icon = models.CharField(max_length=250)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
 
@@ -225,14 +246,17 @@ class Service(models.Model):
 
     def __str__(self):
         """Unicode representation of Service."""
-        pass
+        return self.titre
 
 class Article(models.Model):
     """Model definition for Article."""
 
     titre = models.CharField(max_length=50)
-    description = models.CharField( max_length=255)
+    description = models.CharField(max_length=255)
     image = models.ImageField(upload_to='post')
+    contenu = HTMLField('Content')
+    lien = models.CharField(max_length=50)
+    icon = models.CharField(max_length=250)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -245,7 +269,7 @@ class Article(models.Model):
 
     def __str__(self):
         """Unicode representation of Article."""
-        pass
+        return self.titre
 
 class Clinic_time(models.Model):
     """Model definition for Clinic_time."""
@@ -253,6 +277,7 @@ class Clinic_time(models.Model):
     titre = models.CharField(max_length=50)
     description = models.CharField(max_length=50)
     logo = models.ImageField(upload_to='post')
+    icon = models.CharField(max_length=250)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -265,7 +290,7 @@ class Clinic_time(models.Model):
 
     def __str__(self):
         """Unicode representation of Clinic_time."""
-        pass
+        return self.titre
 
 class Working_hour(models.Model):
     """Model definition for Working_hour."""
@@ -274,6 +299,7 @@ class Working_hour(models.Model):
     image = models.ImageField(upload_to='post')
     days = models.CharField(max_length=50)
     hours = models.CharField(max_length=50)
+    icon = models.CharField(max_length=250)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -286,14 +312,15 @@ class Working_hour(models.Model):
 
     def __str__(self):
         """Unicode representation of Working_hour."""
-        pass
+        return self.titre
 
 class Emergence_case(models.Model):
     """Model definition for Emergence_case."""
 
     titre = models.CharField(max_length=50)
-    description = models.CharField(max_length=50)
+    description = models.CharField(max_length=255)
     image = models.ImageField(upload_to='post')
+    icon = models.CharField(max_length=250)
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -306,9 +333,53 @@ class Emergence_case(models.Model):
 
     def __str__(self):
         """Unicode representation of Emergence_case."""
-        pass
+        return self.titre
+
+class Hebergement(models.Model):
+    """Model definition for Hebergement."""
+
+    titre = models.CharField(max_length=255)
+    adresse = models.CharField(max_length=255)
+    stockage = models.CharField(max_length=255)
+    base_data = models.CharField(max_length=255)
+    domaine = models.CharField(max_length=255)
+    support = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='post')
+    prix = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    statut = models.BooleanField(default = True)
+    date_add = models.DateTimeField(auto_now_add= True)
+    date_update = models.DateTimeField(auto_now= True)
 
 
+    class Meta:
+        """Meta definition for Hebergement."""
+
+        verbose_name = 'Hebergement'
+        verbose_name_plural = 'Hebergements'
+
+    def __str__(self):
+        """Unicode representation of Hebergement."""
+        return self.titre
+
+
+class Cart(models.Model):
+    """Model definition for Cart."""
+
+    lien = models.CharField(max_length=255)
+    statut = models.BooleanField(default = True)
+    date_add = models.DateTimeField(auto_now_add= True)
+    date_update = models.DateTimeField(auto_now= True)
+
+    class Meta:
+        """Meta definition for Cart."""
+
+        verbose_name = 'Cart'
+        verbose_name_plural = 'Carts'
+
+    def __str__(self):
+        """Unicode representation of Cart."""
+        return self.lien
 
   
 ```
